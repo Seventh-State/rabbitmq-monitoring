@@ -11,9 +11,9 @@ For more information, visit the website of Seventh State RabbitMQ Support, https
 * **RabbitMQ Clusters (ID: 20697)** \
   The Clusters Dashboard provides a view of all RabbitMQ clusters within your environment. It showcases metrics offering a high-level overview critical for managing multiple clusters effectively. \
   [Download from Grafana Website](https://grafana.com/grafana/dashboards/20697-rabbitmq-clusters-seventh-state-rabbitmq-support/)
-* **RabbitMQ Channels Overview (ID: 20699)** \
+* **RabbitMQ Channels Overview (ID: 20831)** \
   The Channels Overview Dashboard offers insights into RabbitMQ channels, including global counts, message rates per channel, and channel utilisation. Channels are crucial for message throughput, making this dashboard invaluable for tuning and capacity planning. \
-  [Download from Grafana Website](https://grafana.com/grafana/dashboards/20699-rabbitmq-channels-overview-seventh-state-rabbitmq-support/)
+  [Download from Grafana Website](https://grafana.com/grafana/dashboards/20831-rabbitmq-channels-overview-seventh-state-rabbitmq-support/)
 * **RabbitMQ Connections Overview (ID: 20698)** \
   This dashboard focuses on RabbitMQ connections, presenting key metrics like connection throughput.  \
   [Download from Grafana Website](https://grafana.com/grafana/dashboards/20698-rabbitmq-connections-overview-seventh-state-rabbitmq-support/)
