@@ -422,15 +422,16 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "label_values($namespace,$namespace)",
+        "definition": "label_values(rabbitmq_identity_info,namespace)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
+        "label": "Namespace",
         "name": "namespace",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values($namespace,$namespace)",
+          "query": "label_values(rabbitmq_identity_info,namespace)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
