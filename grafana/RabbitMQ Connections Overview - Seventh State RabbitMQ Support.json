@@ -52,7 +52,7 @@
       }
     ]
   },
-  "description": "Overview of all queues in a RabbitMQ Cluster",
+  "description": "Overview of all connections in a RabbitMQ Cluster",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
