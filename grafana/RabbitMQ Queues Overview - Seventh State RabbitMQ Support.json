@@ -161,7 +161,8 @@
               "type": "auto"
             },
             "filterable": true,
-            "inspect": false
+            "inspect": false,
+            "minWidth": 100
           },
           "fieldMinMax": false,
           "mappings": [],
@@ -176,7 +177,7 @@
             },
             "properties": [
               {
-                "id": "custom.width",
+                "id": "custom.minWidth",
                 "value": 304
               },
               {
@@ -188,30 +189,6 @@
                     "url": "${queue_detail_dashboard_url_with_queue}var-namespace=$namespace&var-rabbitmq_cluster=$rabbitmq_cluster&var-rabbitmq_vhost=$rabbitmq_vhost&var-queue=${__value.raw}"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "vhost"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 165
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Messages"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 128
               }
             ]
           },
@@ -235,102 +212,19 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 107
+                "value": 100
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Publish rate"
+              "options": "vhost"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 128
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Deliver (auto-ack)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 133
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Get (auto-ack)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 170
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Get (ack)"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 85
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Ack rate"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 114
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Vhost"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 69
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Redeliver"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 122
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Queue"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
+                "value": 70
               }
             ]
           }
@@ -356,12 +250,7 @@
         },
         "frameIndex": 0,
         "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Redelivered"
-          }
-        ]
+        "sortBy": []
       },
       "pluginVersion": "10.4.0",
       "targets": [
@@ -372,14 +261,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": " sum by (rabbitmq_cluster, vhost, queue) (rabbitmq_detailed_queue_messages{vhost=\"$rabbitmq_vhost\"} * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})\n",
+          "expr": " sum by (rabbitmq_cluster, vhost, queue) (rabbitmq_detailed_queue_messages{vhost=\"$rabbitmq_vhost\"} * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "",
           "range": true,
-          "refId": "A"
+          "refId": "messages"
         },
         {
           "datasource": {
@@ -396,7 +285,7 @@
           "instant": true,
           "legendFormat": "",
           "range": false,
-          "refId": "B",
+          "refId": "consumers",
           "useBackend": false
         },
         {
@@ -406,13 +295,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_channel_messages_acked_total{vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_messages_acked_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "C"
+          "refId": "ack"
         },
         {
           "datasource": {
@@ -421,13 +310,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_queue_messages_published_total{queue_vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((label_replace(irate(rabbitmq_detailed_queue_messages_published_total{queue_vhost=\"$rabbitmq_vhost\"}[30s]), \"vhost\", \"$1\", \"queue_vhost\", \"(.*)\") or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "D"
+          "refId": "publish"
         },
         {
           "datasource": {
@@ -436,13 +325,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_channel_messages_delivered_total{vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_messages_delivered_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "E"
+          "refId": "deliver_auto_ack"
         },
         {
           "datasource": {
@@ -451,13 +340,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_channel_get_total{vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_get_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "F"
+          "refId": "get_auto_ack"
         },
         {
           "datasource": {
@@ -466,13 +355,13 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_channel_get_ack_total{vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_get_ack_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "G"
+          "refId": "get_ack"
         },
         {
           "datasource": {
@@ -481,25 +370,20 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) (irate(rabbitmq_detailed_channel_messages_redelivered_total{vhost=\"$rabbitmq_vhost\"}[30s])  * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_get_ack_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "H"
+          "refId": "redelivered"
         }
       ],
       "title": "Queues",
       "transformations": [
         {
           "id": "timeSeriesTable",
-          "options": {
-            "C": {
-              "stat": "lastNotNull",
-              "timeField": ""
-            }
-          }
+          "options": {}
         },
         {
           "id": "merge",
@@ -512,14 +396,14 @@
               "names": [
                 "queue",
                 "vhost",
-                "Trend #A",
-                "Trend #C",
-                "Trend #D",
-                "Trend #E",
-                "Trend #F",
-                "Trend #G",
-                "Trend #H",
-                "Trend #B"
+                "Trend #messages",
+                "Trend #consumers",
+                "Trend #ack",
+                "Trend #publish",
+                "Trend #deliver_auto_ack",
+                "Trend #get_auto_ack",
+                "Trend #get_ack",
+                "Trend #redelivered"
               ]
             }
           }
@@ -527,36 +411,29 @@
         {
           "id": "organize",
           "options": {
-            "excludeByName": {
-              "Trend #C": false
-            },
+            "excludeByName": {},
             "includeByName": {},
             "indexByName": {
-              "Ack rate": 5,
-              "Get (ack)": 10,
-              "Get (auto-ack)": 9,
-              "Redeliver": 8,
-              "Trend #A": 2,
-              "Trend #B": 3,
-              "Trend #C": 6,
-              "Trend #D": 4,
-              "Trend #E": 7,
+              "vhost": 0,
               "queue": 1,
-              "vhost": 0
+              "Trend #messages": 2,
+              "Trend #consumers": 3,
+              "Trend #ack": 4,
+              "Trend #publish": 5,
+              "Trend #deliver_auto_ack": 6,
+              "Trend #get_auto_ack": 7,
+              "Trend #get_ack": 8,
+              "Trend #redelivered": 9
             },
             "renameByName": {
-              "Acknowledgement rate": "",
-              "Publish rate": "",
-              "Redeliver": "",
-              "Trend #A": "Messages",
-              "Trend #B": "Consumers",
-              "Trend #C": "Ack rate",
-              "Trend #D": "Publish rate",
-              "Trend #E": "Deliver (auto-ack)",
-              "Trend #F": "Get (auto-ack)",
-              "Trend #G": "Get (ack)",
-              "Trend #H": "Redelivered",
-              "creator": "",
+              "Trend #ack": "Ack rate",
+              "Trend #consumers": "Consumers",
+              "Trend #deliver_auto_ack": "Deliver (auto-ack)",
+              "Trend #get_ack": "Get (ack)",
+              "Trend #get_auto_ack": "Get (auto-ack)",
+              "Trend #messages": "Messages",
+              "Trend #publish": "Publish rate",
+              "Trend #redelivered": "Redelivered",
               "queue": "Queue",
               "vhost": "Vhost"
             }
