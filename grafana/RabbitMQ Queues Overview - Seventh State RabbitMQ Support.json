@@ -370,7 +370,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_get_ack_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
+          "expr": "sum by (rabbitmq_cluster, vhost, queue) ((irate(rabbitmq_detailed_channel_messages_redelivered_total{vhost=\"$rabbitmq_vhost\"}[30s]) or rabbitmq_detailed_queue_consumers{vhost=\"$rabbitmq_vhost\"} * 0) * on(instance, job) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=\"$rabbitmq_cluster\", namespace=\"$namespace\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
