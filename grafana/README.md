@@ -8,6 +8,17 @@ For more information on how to use the dashboards, please visit https://sevenths
 These dashboards are available for download from the Grafana Website: \
 https://grafana.com/orgs/seventhstate
 
+## Metrics Used in Dashboards
+
+The detailed metrics used in these dashboards are grouped under the followings:
+
+- channel_metrics
+- connection_coarse_metrics
+- queue_coarse_metrics
+- queue_consumer_count
+- queue_delivery_metrics
+- queue_exchange_metrics
+
 ## Editing the Grafana Dashboards
 
 1. Provisioned dashboards can not be edited - they have to be copied
