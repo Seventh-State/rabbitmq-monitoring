@@ -186,7 +186,7 @@
                   {
                     "targetBlank": true,
                     "title": "Show details",
-                    "url": "${queue_detail_dashboard_url_with_queue}var-namespace=$namespace&var-rabbitmq_cluster=$rabbitmq_cluster&var-rabbitmq_vhost=$rabbitmq_vhost&var-queue=${__value.raw}"
+                    "url": "d/${queue_detail_dashboard_url_with_queue}var-namespace=$namespace&var-rabbitmq_cluster=$rabbitmq_cluster&var-rabbitmq_vhost=$rabbitmq_vhost&var-queue=${__value.raw}"
                   }
                 ]
               }
@@ -548,7 +548,7 @@
             "value": "/d/7s-rabbitmq-queue-details/9bb61407-2c79-5714-8e4c-716d3dad9da4?orgId=1&refresh=5s&"
           }
         ],
-        "query": "/d/${queue_details_dashboard_uuid}/9bb61407-2c79-5714-8e4c-716d3dad9da4?orgId=1&refresh=5s&",
+        "query": "${queue_details_dashboard_uuid}/9bb61407-2c79-5714-8e4c-716d3dad9da4?orgId=1&refresh=5s&",
         "skipUrlSync": false,
         "type": "custom"
       },
@@ -567,7 +567,7 @@
             "value": "${VAR_QUEUE_DETAILS_DASHBOARD_UUID}"
           }
         ],
-        "query": "${VAR_QUEUE_DETAILS_DASHBOARD_UUID}",
+        "query": "7s-rabbitmq-queue-details",
         "skipUrlSync": false,
         "type": "constant"
       }
