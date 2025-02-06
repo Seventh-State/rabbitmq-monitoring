@@ -37,6 +37,10 @@ dashboard_config = {
         "tags": ["rabbitmq-prometheus", "7s-rabbitmq-support"],
         "uid": "7s-rabbitmq-investigation-metrics"
     },
+    "Queues List Simplified": {
+        "tags": ["rabbitmq-prometheus", "7s-rabbitmq-support"],
+        "uid": "7s-rabbitmq-queue-list-simplified"
+    }
 }
 
 print('\n'.join(list(dashboard_config)))
